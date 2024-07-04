@@ -1,2 +1,2 @@
 # HighLevel
-Custom Countdown Timer
+Custom Countdown Timer written using HTML, CSS, and JavaScript that are manually merged.
