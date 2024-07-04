@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBAW® Countdown Timer</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+        }
+        .card {
+            margin: 0 auto;
+            padding: 16px 36px;
+            display: block;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            background-color: #000;
+            border-radius: 12px;
+            box-shadow: 0 10px 10px -5px #909090;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #countdown {
+            font-size: 24px;
+        }
+
+        .label {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Early Bird Ends In:</h1>
+        <span id="countdown" style="font-weight: bold;"></span>
+        <div>
+            <span id="hours" style="font-weight: bold;"></span> <span class="label">Hours</span>
+            <span id="minutes" style="font-weight: bold;"></span> <span class="label">Minutes</span>
+            <span id="seconds" style="font-weight: bold;"></span> <span class="label">Seconds</span>
+        </div>
+    </div>
+
+    <script>
+        var timeInSecs;
+        var ticker;
+
+        function startTimer(secs) {
+            timeInSecs = parseInt(secs);
+            ticker = setInterval(tick, 1000);
+        }
+
+        function tick() {
+            var secs = timeInSecs;
+            if (secs > 0) {
+                timeInSecs--;
+            } else {
+                clearInterval(ticker);
+                startTimer(48 * 3600); // Reset to 48 hours
+            }
+
+            var hours = Math.floor(secs / 3600);
+            secs %= 3600;
+            var mins = Math.floor(secs / 60);
+            secs %= 60;
+
+            document.getElementById("hours").innerHTML = (hours < 10 ? "0" : "") + hours;
+            document.getElementById("minutes").innerHTML = (mins < 10 ? "0" : "") + mins;
+            document.getElementById("seconds").innerHTML = (secs < 10 ? "0" : "") + secs;
+
+            var pretty = ((hours < 10) ? "0" : "") + hours + ":" + ((mins < 10) ? "0" : "") + mins + ":" + ((secs < 10) ? "0" : "") + secs;
+            document.getElementById("countdown").innerHTML = pretty;
+        }
+
+        startTimer(48 * 3600); // 48 hours in seconds
+    </script>
+</body>
+</html>
