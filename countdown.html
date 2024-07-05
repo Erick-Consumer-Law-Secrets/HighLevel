@@ -8,7 +8,7 @@
         body {
             background-color: #f1f1f1;
             font-family: 'Montserrat', sans-serif;
-            color: #fff;
+			      color: #fff;
         }
         .card {
             margin: 0 auto;
@@ -27,7 +27,7 @@
         }
 
         #countdown {
-            font-size: 24px;
+            font-size: 72px;
         }
 
         .label {
@@ -37,7 +37,7 @@
 </head>
 <body>
     <div class="card">
-        <h1>Early Bird Ends In:</h1>
+        <h1>Early Bird Offer Ends In:</h1>
         <span id="countdown" style="font-weight: bold;"></span>
         <div>
             <span id="hours" style="font-weight: bold;"></span> <span class="label">Hours</span>
@@ -47,37 +47,40 @@
     </div>
 
     <script>
-        var timeInSecs;
         var ticker;
 
-        function startTimer(secs) {
-            timeInSecs = parseInt(secs);
-            ticker = setInterval(tick, 1000);
+        function startTimer() {
+            // Set the end time to midnight of July 6, 2024, EDT (UTC-4)
+            var endTime = new Date("2024-07-06T04:00:00Z").getTime(); // Convert to UTC
+
+            // Update the countdown every 1 second
+            ticker = setInterval(function() {
+                var currentTime = new Date().getTime();
+                var distance = endTime - currentTime;
+
+                if (distance < 0) {
+                    clearInterval(ticker);
+                    document.getElementById("countdown").innerHTML = "00:00:00";
+                    document.getElementById("hours").innerHTML = "00";
+                    document.getElementById("minutes").innerHTML = "00";
+                    document.getElementById("seconds").innerHTML = "00";
+                    return;
+                }
+
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("hours").innerHTML = (hours < 10 ? "0" : "") + hours;
+                document.getElementById("minutes").innerHTML = (minutes < 10 ? "0" : "") + minutes;
+                document.getElementById("seconds").innerHTML = (seconds < 10 ? "0" : "") + seconds;
+
+                var pretty = ((hours < 10) ? "0" : "") + hours + ":" + ((minutes < 10) ? "0" : "") + minutes + ":" + ((seconds < 10) ? "0" : "") + seconds;
+                document.getElementById("countdown").innerHTML = pretty;
+            }, 1000);
         }
 
-        function tick() {
-            var secs = timeInSecs;
-            if (secs > 0) {
-                timeInSecs--;
-            } else {
-                clearInterval(ticker);
-                startTimer(48 * 3600); // Reset to 48 hours
-            }
-
-            var hours = Math.floor(secs / 3600);
-            secs %= 3600;
-            var mins = Math.floor(secs / 60);
-            secs %= 60;
-
-            document.getElementById("hours").innerHTML = (hours < 10 ? "0" : "") + hours;
-            document.getElementById("minutes").innerHTML = (mins < 10 ? "0" : "") + mins;
-            document.getElementById("seconds").innerHTML = (secs < 10 ? "0" : "") + secs;
-
-            var pretty = ((hours < 10) ? "0" : "") + hours + ":" + ((mins < 10) ? "0" : "") + mins + ":" + ((secs < 10) ? "0" : "") + secs;
-            document.getElementById("countdown").innerHTML = pretty;
-        }
-
-        startTimer(48 * 3600); // 48 hours in seconds
+        startTimer();
     </script>
 </body>
 </html>
